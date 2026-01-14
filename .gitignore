@@ -26,3 +26,31 @@ tools/mkrom/mkrom
 CppProperties.json
 .idea
 cmake-build-debug
+
+# Perfect Dark Launcher
+PerfectDarkLauncher/build/
+PerfectDarkLauncher/DerivedData/
+*.xcuserstate
+xcuserdata/
+*.pbxuser
+*.perspectivev3
+*.mode1v3
+*.mode2v3
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.dmg
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Temporary/config
+*.log
+*.tmp
+*.bak
+pd.ini

@@ -12,6 +12,9 @@
 		001A00002B0000000000000E /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A00002B0000000000000F /* GameSettings.swift */; };
 		001A00002B0000000000001A /* GameLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001A00002B0000000000001B /* GameLauncher.swift */; };
 		001A00002B00000000000010 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 001A00002B00000000000011 /* Assets.xcassets */; };
+		001A00002B00000000000020 /* pd.arm64 in Resources */ = {isa = PBXBuildFile; fileRef = 001A00002B00000000000021 /* pd.arm64 */; };
+		001A00002B00000000000022 /* pd.jpn.arm64 in Resources */ = {isa = PBXBuildFile; fileRef = 001A00002B00000000000023 /* pd.jpn.arm64 */; };
+		001A00002B00000000000024 /* pd.pal.arm64 in Resources */ = {isa = PBXBuildFile; fileRef = 001A00002B00000000000025 /* pd.pal.arm64 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +24,9 @@
 		001A00002B0000000000001B /* GameLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLauncher.swift; sourceTree = "<group>"; };
 		001A00002B00000000000011 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		001A00002B00000000000001 /* PerfectDarkLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PerfectDarkLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		001A00002B00000000000021 /* pd.arm64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = pd.arm64; sourceTree = "<group>"; };
+		001A00002B00000000000023 /* pd.jpn.arm64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = pd.jpn.arm64; sourceTree = "<group>"; };
+		001A00002B00000000000025 /* pd.pal.arm64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = pd.pal.arm64; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,8 +56,19 @@
 				001A00002B0000000000000F /* GameSettings.swift */,
 				001A00002B0000000000001B /* GameLauncher.swift */,
 				001A00002B00000000000011 /* Assets.xcassets */,
+				001A00002B00000000000030 /* Resources */,
 			);
 			path = PerfectDarkLauncher;
+			sourceTree = "<group>";
+		};
+		001A00002B00000000000030 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				001A00002B00000000000021 /* pd.arm64 */,
+				001A00002B00000000000023 /* pd.jpn.arm64 */,
+				001A00002B00000000000025 /* pd.pal.arm64 */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		001A00002B00000000000005 /* Products */ = {
@@ -121,6 +138,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				001A00002B00000000000010 /* Assets.xcassets in Resources */,
+				001A00002B00000000000020 /* pd.arm64 in Resources */,
+				001A00002B00000000000022 /* pd.jpn.arm64 in Resources */,
+				001A00002B00000000000024 /* pd.pal.arm64 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

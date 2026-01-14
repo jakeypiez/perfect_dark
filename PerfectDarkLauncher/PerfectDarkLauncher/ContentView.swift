@@ -371,17 +371,22 @@ struct RomSelectionView: View {
 struct VideoSettingsView: View {
     @EnvironmentObject var settings: GameSettings
     
+    // MacBook-optimized resolutions (16:10 aspect ratio common on MacBooks)
     let commonResolutions = [
-        (640, 480, "640×480 (4:3)"),
-        (800, 600, "800×600 (4:3)"),
-        (1024, 768, "1024×768 (4:3)"),
+        // 16:10 MacBook Native/Scaled Resolutions
+        (1280, 800, "1280×800 (16:10 MacBook)"),
+        (1440, 900, "1440×900 (16:10 MacBook Air)"),
+        (1680, 1050, "1680×1050 (16:10 Scaled)"),
+        (1920, 1200, "1920×1200 (16:10 WUXGA)"),
+        (2560, 1600, "2560×1600 (16:10 MacBook Pro)"),
+        // 16:9 Resolutions (External Displays)
         (1280, 720, "1280×720 (16:9 HD)"),
-        (1280, 960, "1280×960 (4:3)"),
-        (1366, 768, "1366×768 (16:9)"),
-        (1600, 900, "1600×900 (16:9)"),
         (1920, 1080, "1920×1080 (16:9 Full HD)"),
         (2560, 1440, "2560×1440 (16:9 QHD)"),
-        (3840, 2160, "3840×2160 (16:9 4K)")
+        // Retina / HiDPI
+        (2880, 1800, "2880×1800 (Retina 15\")"),
+        (3024, 1890, "3024×1890 (MacBook Pro 14\")"),
+        (3456, 2160, "3456×2160 (MacBook Pro 16\")"),
     ]
     
     var body: some View {
@@ -507,13 +512,34 @@ struct VideoSettingsView: View {
                             Text("Unlimited").tag(0)
                             Text("30 FPS").tag(30)
                             Text("60 FPS").tag(60)
-                            Text("120 FPS").tag(120)
+                            Text("120 FPS (ProMotion)").tag(120)
                             Text("144 FPS").tag(144)
                             Text("240 FPS").tag(240)
                         }
                         .pickerStyle(.menu)
                         .frame(width: 200)
                     }
+                }
+                .padding(8)
+            }
+            
+            // MacBook-Specific Settings
+            GroupBox {
+                VStack(alignment: .leading, spacing: 12) {
+                    Label("MacBook Optimization", systemImage: "laptopcomputer")
+                        .font(.headline)
+                    
+                    Toggle("Retina / HiDPI Resolution", isOn: $settings.allowRetinaResolution)
+                    Text("Enable native resolution rendering on Retina displays. May impact performance on older Macs.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                    
+                    Toggle("Trackpad Mode", isOn: $settings.trackpadMode)
+                    Text("Optimizes mouse sensitivity and acceleration for MacBook trackpads. Disable if using an external mouse.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
                 }
                 .padding(8)
             }

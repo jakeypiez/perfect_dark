@@ -41,6 +41,12 @@ class GameSettings: ObservableObject {
     @Published var useFramebuffers: Bool {
         didSet { saveSettings() }
     }
+    @Published var allowRetinaResolution: Bool {
+        didSet { saveSettings() }
+    }
+    @Published var trackpadMode: Bool {
+        didSet { saveSettings() }
+    }
     
     // Game Settings
     @Published var memorySize: Int {
@@ -160,9 +166,9 @@ class GameSettings: ObservableObject {
         romPath = defaults.string(forKey: "romPath") ?? ""
         romRegion = RomRegion(rawValue: defaults.string(forKey: "romRegion") ?? "ntsc-final") ?? .ntscFinal
         
-        // Video defaults
-        windowWidth = defaults.object(forKey: "windowWidth") as? Int ?? 1280
-        windowHeight = defaults.object(forKey: "windowHeight") as? Int ?? 720
+        // Video defaults - 1440x900 is optimal for most MacBooks
+        windowWidth = defaults.object(forKey: "windowWidth") as? Int ?? 1440
+        windowHeight = defaults.object(forKey: "windowHeight") as? Int ?? 900
         fullscreen = defaults.bool(forKey: "fullscreen")
         fullscreenExclusive = defaults.bool(forKey: "fullscreenExclusive")
         vsync = defaults.object(forKey: "vsync") as? Int ?? 1
@@ -171,6 +177,8 @@ class GameSettings: ObservableObject {
         textureFilter = TextureFilter(rawValue: defaults.object(forKey: "textureFilter") as? Int ?? 1) ?? .linear
         detailTextures = defaults.bool(forKey: "detailTextures")
         useFramebuffers = defaults.object(forKey: "useFramebuffers") as? Bool ?? true
+        allowRetinaResolution = defaults.object(forKey: "allowRetinaResolution") as? Bool ?? false
+        trackpadMode = defaults.object(forKey: "trackpadMode") as? Bool ?? true
         
         // Game defaults
         memorySize = defaults.object(forKey: "memorySize") as? Int ?? 16
@@ -215,6 +223,8 @@ class GameSettings: ObservableObject {
         defaults.set(textureFilter.rawValue, forKey: "textureFilter")
         defaults.set(detailTextures, forKey: "detailTextures")
         defaults.set(useFramebuffers, forKey: "useFramebuffers")
+        defaults.set(allowRetinaResolution, forKey: "allowRetinaResolution")
+        defaults.set(trackpadMode, forKey: "trackpadMode")
         
         defaults.set(memorySize, forKey: "memorySize")
         defaults.set(skipIntro, forKey: "skipIntro")
@@ -240,8 +250,8 @@ class GameSettings: ObservableObject {
     func resetToDefaults() {
         isLoading = true
         
-        windowWidth = 1280
-        windowHeight = 720
+        windowWidth = 1440
+        windowHeight = 900
         fullscreen = false
         fullscreenExclusive = false
         vsync = 1
@@ -250,6 +260,8 @@ class GameSettings: ObservableObject {
         textureFilter = .linear
         detailTextures = false
         useFramebuffers = true
+        allowRetinaResolution = false
+        trackpadMode = true
         
         memorySize = 16
         skipIntro = false

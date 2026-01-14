@@ -97,6 +97,11 @@ class GameLauncher {
             return settings.gameExecutablePath
         }
         
+        // First, check for bundled executables in the app bundle
+        if let bundledExecutable = findBundledExecutable(settings: settings) {
+            return bundledExecutable
+        }
+        
         let romDirectory = (settings.romPath as NSString).deletingLastPathComponent
         
         // Common executable names based on architecture
@@ -151,6 +156,38 @@ class GameLauncher {
         return nil
     }
     
+    private func findBundledExecutable(settings: GameSettings) -> String? {
+        guard let resourcePath = Bundle.main.resourcePath else { return nil }
+        
+        // Map region to executable name
+        let executableName: String
+        switch settings.romRegion {
+        case .ntscFinal:
+            executableName = "pd.arm64"
+        case .palFinal:
+            executableName = "pd.pal.arm64"
+        case .jpnFinal:
+            executableName = "pd.jpn.arm64"
+        }
+        
+        let bundledPath = (resourcePath as NSString).appendingPathComponent(executableName)
+        
+        if FileManager.default.isExecutableFile(atPath: bundledPath) {
+            return bundledPath
+        }
+        
+        // Fallback: try to find any bundled executable
+        let fallbackNames = ["pd.arm64", "pd.pal.arm64", "pd.jpn.arm64"]
+        for name in fallbackNames {
+            let path = (resourcePath as NSString).appendingPathComponent(name)
+            if FileManager.default.isExecutableFile(atPath: path) {
+                return path
+            }
+        }
+        
+        return nil
+    }
+    
     private func getArchitecture() -> String {
         #if arch(arm64)
         return "arm64"
@@ -162,10 +199,28 @@ class GameLauncher {
     }
     
     private func getWorkingDirectory(settings: GameSettings, executablePath: String) -> String {
+        // If user specified a data path, use that
         if !settings.gameDataPath.isEmpty {
             return settings.gameDataPath
         }
+        
+        // If executable is bundled in app, use Application Support directory
+        if executablePath.contains(".app/Contents/Resources") {
+            return getApplicationSupportDirectory()
+        }
+        
+        // Otherwise use executable's directory
         return (executablePath as NSString).deletingLastPathComponent
+    }
+    
+    private func getApplicationSupportDirectory() -> String {
+        let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let pdSupportURL = appSupportURL.appendingPathComponent("PerfectDark")
+        
+        // Create directory if it doesn't exist
+        try? FileManager.default.createDirectory(at: pdSupportURL, withIntermediateDirectories: true)
+        
+        return pdSupportURL.path
     }
     
     private func writeConfigFile(settings: GameSettings, directory: String) -> Result<Void, LaunchError> {
@@ -186,6 +241,7 @@ class GameLauncher {
         TextureFilter=\(settings.textureFilter.rawValue)
         DetailTextures=\(settings.detailTextures ? 1 : 0)
         Framebuffers=\(settings.useFramebuffers ? 1 : 0)
+        AllowHiDpi=\(settings.allowRetinaResolution ? 1 : 0)
         
         [Game]
         MemorySize=\(settings.memorySize)
@@ -201,8 +257,8 @@ class GameLauncher {
         FovY=\(String(format: "%.1f", settings.player1FovY))
         FovAffectsZoom=\(settings.player1FovAffectsZoom ? 1 : 0)
         MouseAimMode=\(settings.player1MouseAimMode ? 1 : 0)
-        MouseAimSpeedX=\(String(format: "%.2f", settings.player1MouseAimSpeedX))
-        MouseAimSpeedY=\(String(format: "%.2f", settings.player1MouseAimSpeedY))
+        MouseAimSpeedX=\(String(format: "%.2f", settings.trackpadMode ? settings.player1MouseAimSpeedX * 0.6 : settings.player1MouseAimSpeedX))
+        MouseAimSpeedY=\(String(format: "%.2f", settings.trackpadMode ? settings.player1MouseAimSpeedY * 0.6 : settings.player1MouseAimSpeedY))
         
         """
         
