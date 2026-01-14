@@ -9,7 +9,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR"
 BUILD_DIR="$PROJECT_DIR/build"
 APP_NAME="Carrington"
-BUNDLE_NAME="PerfectDarkLauncher"
+BUNDLE_NAME="Carrington"
+XCODE_PROJECT="PerfectDarkLauncher"  # Xcode project/scheme name (unchanged)
 DMG_NAME="Carrington"
 VERSION="1.0.0"
 
@@ -54,7 +55,8 @@ generate_icon() {
     
     # Use the official Perfect Dark icon from the port
     ICON_SOURCE="$SCRIPT_DIR/../dist/windows/icon.ico"
-    ICONSET_DIR="$PROJECT_DIR/$BUNDLE_NAME/Assets.xcassets/AppIcon.appiconset"
+    # Source folder remains PerfectDarkLauncher (Xcode project structure)
+    ICONSET_DIR="$PROJECT_DIR/PerfectDarkLauncher/Assets.xcassets/AppIcon.appiconset"
     TEMP_ICONSET="$BUILD_DIR/AppIcon.iconset"
     
     # Check if icons already exist in Assets catalog
@@ -106,8 +108,8 @@ build_app() {
     rm -rf "$BUILD_DIR/$BUNDLE_NAME.app"
     
     # Build for release
-    xcodebuild -project "$BUNDLE_NAME.xcodeproj" \
-        -scheme "$BUNDLE_NAME" \
+    xcodebuild -project "$XCODE_PROJECT.xcodeproj" \
+        -scheme "$XCODE_PROJECT" \
         -configuration Release \
         -derivedDataPath "$BUILD_DIR/DerivedData" \
         -arch arm64 -arch x86_64 \
@@ -150,9 +152,9 @@ fix_rpaths() {
     # Create Frameworks directory
     mkdir -p "$FRAMEWORKS_DIR"
     
-    # Copy SDL2.framework to Frameworks
-    if [ -d "$PROJECT_DIR/$BUNDLE_NAME/Resources/SDL2.framework" ]; then
-        cp -R "$PROJECT_DIR/$BUNDLE_NAME/Resources/SDL2.framework" "$FRAMEWORKS_DIR/"
+    # Copy SDL2.framework to Frameworks (source folder is PerfectDarkLauncher)
+    if [ -d "$PROJECT_DIR/PerfectDarkLauncher/Resources/SDL2.framework" ]; then
+        cp -R "$PROJECT_DIR/PerfectDarkLauncher/Resources/SDL2.framework" "$FRAMEWORKS_DIR/"
         
         # Fix the executables to look for SDL2 in the right place
         for exe in "$RESOURCES_DIR/pd.arm64" "$RESOURCES_DIR/pd.pal.arm64" "$RESOURCES_DIR/pd.jpn.arm64"; do
