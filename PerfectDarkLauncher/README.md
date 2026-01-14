@@ -1,6 +1,6 @@
-# Perfect Dark Launcher
+# Carrington
 
-A native macOS launcher application for the Perfect Dark PC Port.
+A native macOS launcher application for the Perfect Dark PC Port, named after the Carrington Institute.
 
 ## Features
 

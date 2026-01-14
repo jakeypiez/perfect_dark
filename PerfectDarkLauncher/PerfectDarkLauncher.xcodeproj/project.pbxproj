@@ -292,7 +292,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Perfect Dark Launcher";
+				INFOPLIST_KEY_CFBundleDisplayName = Carrington;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Perfect Dark Port Team";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -320,7 +320,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Perfect Dark Launcher";
+				INFOPLIST_KEY_CFBundleDisplayName = Carrington;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2024 Perfect Dark Port Team";
 				LD_RUNPATH_SEARCH_PATHS = (

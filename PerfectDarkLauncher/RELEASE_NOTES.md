@@ -1,6 +1,6 @@
-# Perfect Dark Launcher for macOS
+# Carrington for macOS
 
-A native SwiftUI launcher for the Perfect Dark PC port, designed for Mac users.
+A native SwiftUI launcher for the Perfect Dark PC port, named after the Carrington Institute.
 
 ## Features
 
@@ -22,7 +22,7 @@ A native SwiftUI launcher for the Perfect Dark PC port, designed for Mac users.
 ## Installation
 
 1. Download and mount the DMG
-2. Drag PerfectDarkLauncher to Applications
+2. Drag Carrington to Applications
 3. Launch and select your ROM file
 4. Ensure your ROM is in the same directory as the `data` folder
 5. Configure settings and launch!

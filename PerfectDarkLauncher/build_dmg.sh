@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Perfect Dark Launcher - Build and Package Script
+# Carrington - Build and Package Script
 # Creates a signed .app bundle and .dmg for distribution
 
 set -e
@@ -8,9 +8,9 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR"
 BUILD_DIR="$PROJECT_DIR/build"
-APP_NAME="Perfect Dark Launcher"
+APP_NAME="Carrington"
 BUNDLE_NAME="PerfectDarkLauncher"
-DMG_NAME="PerfectDarkLauncher"
+DMG_NAME="Carrington"
 VERSION="1.0.0"
 
 # Colors for output
@@ -20,7 +20,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}  Perfect Dark Launcher Build Script${NC}"
+echo -e "${GREEN}       Carrington Build Script${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo ""
 
