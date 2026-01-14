@@ -140,8 +140,40 @@ build_app() {
         cp "$BUILD_DIR/AppIcon.icns" "$BUILD_DIR/$BUNDLE_NAME.app/Contents/Resources/AppIcon.icns"
     fi
     
+    # Fix rpaths for bundled game executables
+    fix_rpaths
+    
     echo -e "${GREEN}✓ Application built successfully${NC}"
     echo ""
+}
+
+# Fix rpaths so bundled executables can find SDL2.framework
+fix_rpaths() {
+    echo -e "${YELLOW}Fixing library paths for bundled executables...${NC}"
+    
+    RESOURCES_DIR="$BUILD_DIR/$BUNDLE_NAME.app/Contents/Resources"
+    FRAMEWORKS_DIR="$BUILD_DIR/$BUNDLE_NAME.app/Contents/Frameworks"
+    
+    # Create Frameworks directory
+    mkdir -p "$FRAMEWORKS_DIR"
+    
+    # Copy SDL2.framework to Frameworks
+    if [ -d "$PROJECT_DIR/$BUNDLE_NAME/Resources/SDL2.framework" ]; then
+        cp -R "$PROJECT_DIR/$BUNDLE_NAME/Resources/SDL2.framework" "$FRAMEWORKS_DIR/"
+        
+        # Fix the executables to look for SDL2 in the right place
+        for exe in "$RESOURCES_DIR/pd.arm64" "$RESOURCES_DIR/pd.pal.arm64" "$RESOURCES_DIR/pd.jpn.arm64"; do
+            if [ -f "$exe" ]; then
+                # Add rpath to find frameworks in app bundle
+                install_name_tool -add_rpath "@executable_path/../Frameworks" "$exe" 2>/dev/null || true
+                install_name_tool -add_rpath "@loader_path/../Frameworks" "$exe" 2>/dev/null || true
+            fi
+        done
+        
+        echo -e "${GREEN}✓ SDL2.framework bundled and rpaths fixed${NC}"
+    else
+        echo -e "${RED}Warning: SDL2.framework not found in Resources${NC}"
+    fi
 }
 
 # Create DMG

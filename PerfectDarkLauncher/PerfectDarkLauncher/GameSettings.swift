@@ -47,6 +47,15 @@ class GameSettings: ObservableObject {
     @Published var trackpadMode: Bool {
         didSet { saveSettings() }
     }
+    @Published var maximize: Bool {
+        didSet { saveSettings() }
+    }
+    @Published var textureFilter2D: Bool {
+        didSet { saveSettings() }
+    }
+    @Published var displayFPS: Bool {
+        didSet { saveSettings() }
+    }
     
     // Game Settings
     @Published var memorySize: Int {
@@ -93,6 +102,9 @@ class GameSettings: ObservableObject {
         didSet { saveSettings() }
     }
     @Published var player1MouseAimSpeedY: Double {
+        didSet { saveSettings() }
+    }
+    @Published var crosshairSway: Double {
         didSet { saveSettings() }
     }
     
@@ -179,6 +191,9 @@ class GameSettings: ObservableObject {
         useFramebuffers = defaults.object(forKey: "useFramebuffers") as? Bool ?? true
         allowRetinaResolution = defaults.object(forKey: "allowRetinaResolution") as? Bool ?? false
         trackpadMode = defaults.object(forKey: "trackpadMode") as? Bool ?? true
+        maximize = defaults.object(forKey: "maximize") as? Bool ?? false
+        textureFilter2D = defaults.object(forKey: "textureFilter2D") as? Bool ?? false
+        displayFPS = defaults.object(forKey: "displayFPS") as? Bool ?? false
         
         // Game defaults
         memorySize = defaults.object(forKey: "memorySize") as? Int ?? 16
@@ -199,6 +214,7 @@ class GameSettings: ObservableObject {
         player1MouseAimMode = defaults.bool(forKey: "player1MouseAimMode")
         player1MouseAimSpeedX = defaults.object(forKey: "player1MouseAimSpeedX") as? Double ?? 1.0
         player1MouseAimSpeedY = defaults.object(forKey: "player1MouseAimSpeedY") as? Double ?? 1.0
+        crosshairSway = defaults.object(forKey: "crosshairSway") as? Double ?? 1.0
         
         // Paths
         gameExecutablePath = defaults.string(forKey: "gameExecutablePath") ?? ""
@@ -225,6 +241,9 @@ class GameSettings: ObservableObject {
         defaults.set(useFramebuffers, forKey: "useFramebuffers")
         defaults.set(allowRetinaResolution, forKey: "allowRetinaResolution")
         defaults.set(trackpadMode, forKey: "trackpadMode")
+        defaults.set(maximize, forKey: "maximize")
+        defaults.set(textureFilter2D, forKey: "textureFilter2D")
+        defaults.set(displayFPS, forKey: "displayFPS")
         
         defaults.set(memorySize, forKey: "memorySize")
         defaults.set(skipIntro, forKey: "skipIntro")
@@ -242,6 +261,7 @@ class GameSettings: ObservableObject {
         defaults.set(player1MouseAimMode, forKey: "player1MouseAimMode")
         defaults.set(player1MouseAimSpeedX, forKey: "player1MouseAimSpeedX")
         defaults.set(player1MouseAimSpeedY, forKey: "player1MouseAimSpeedY")
+        defaults.set(crosshairSway, forKey: "crosshairSway")
         
         defaults.set(gameExecutablePath, forKey: "gameExecutablePath")
         defaults.set(gameDataPath, forKey: "gameDataPath")
@@ -262,6 +282,9 @@ class GameSettings: ObservableObject {
         useFramebuffers = true
         allowRetinaResolution = false
         trackpadMode = true
+        maximize = false
+        textureFilter2D = false
+        displayFPS = false
         
         memorySize = 16
         skipIntro = false
@@ -279,6 +302,7 @@ class GameSettings: ObservableObject {
         player1MouseAimMode = false
         player1MouseAimSpeedX = 1.0
         player1MouseAimSpeedY = 1.0
+        crosshairSway = 1.0
         
         isLoading = false
         saveSettings()
