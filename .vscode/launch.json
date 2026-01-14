@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:perfect_dark}/PerfectDarkLauncher",
+            "name": "Debug PerfectDarkLauncher (PerfectDarkLauncher)",
+            "target": "PerfectDarkLauncher",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug PerfectDarkLauncher (PerfectDarkLauncher)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:perfect_dark}/PerfectDarkLauncher",
+            "name": "Release PerfectDarkLauncher (PerfectDarkLauncher)",
+            "target": "PerfectDarkLauncher",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release PerfectDarkLauncher (PerfectDarkLauncher)"
+        }
+    ]
+}
