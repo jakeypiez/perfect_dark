@@ -82,24 +82,28 @@ class GameLauncher {
             arguments.append("--skip-intro")
         }
         
-        // Launch the game
-        do {
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: executable)
-            process.arguments = arguments
-            process.currentDirectoryURL = URL(fileURLWithPath: workingDirectory)
-            
-            // Set up environment
-            var environment = ProcessInfo.processInfo.environment
-            environment["DYLD_LIBRARY_PATH"] = workingDirectory
-            process.environment = environment
-            
-            try process.run()
-            
-            return .success(())
-        } catch {
-            return .failure(.failedToLaunch(error.localizedDescription))
+        // Launch the game by replacing this process with the game (execv)
+        // This makes the game "become" Carrington - single Dock icon
+        
+        // Change to working directory
+        FileManager.default.changeCurrentDirectoryPath(workingDirectory)
+        
+        // Set environment variables
+        setenv("DYLD_LIBRARY_PATH", workingDirectory, 1)
+        
+        // Build argv for execv (executable path + arguments + NULL terminator)
+        var argv: [UnsafeMutablePointer<CChar>?] = []
+        argv.append(strdup(executable))
+        for arg in arguments {
+            argv.append(strdup(arg))
         }
+        argv.append(nil)
+        
+        // Replace this process with the game
+        execv(executable, &argv)
+        
+        // If execv returns, it failed
+        return .failure(.failedToLaunch("execv failed: \(String(cString: strerror(errno)))"))
     }
     
     private func findExecutable(settings: GameSettings) -> String? {
