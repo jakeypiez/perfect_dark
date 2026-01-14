@@ -30,6 +30,8 @@ cmake-build-debug
 # Perfect Dark Launcher
 PerfectDarkLauncher/build/
 PerfectDarkLauncher/DerivedData/
+PerfectDarkLauncher/.build/
+PerfectDarkLauncher/.swiftpm/
 *.xcuserstate
 xcuserdata/
 *.pbxuser

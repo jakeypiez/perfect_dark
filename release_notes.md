@@ -18,7 +18,7 @@ A native SwiftUI launcher application for the Perfect Dark PC port with bundled 
 
 ### Requirements
 - macOS 12.0 (Monterey) or later
-- Universal binary (Apple Silicon and Intel)
+- Apple Silicon Mac (arm64)
 - Perfect Dark ROM file (.z64 format)
 
 ### Installation
@@ -27,9 +27,3 @@ A native SwiftUI launcher application for the Perfect Dark PC port with bundled 
 3. Launch the app and select your ROM file
 4. Configure settings as desired
 5. Click Launch Game
-
-### Changes in v1.0.2
-- **Bundled Executables**: Game executables now included in the app bundle
-- Region-specific executables: NTSC, PAL, and JPN versions included
-- Config files stored in ~/Library/Application Support/PerfectDark/
-- No need to separately download or locate the game executable
