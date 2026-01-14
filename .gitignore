@@ -27,6 +27,9 @@ CppProperties.json
 .idea
 cmake-build-debug
 
+# VS Code
+.vscode/
+
 # Perfect Dark Launcher
 PerfectDarkLauncher/build/
 PerfectDarkLauncher/DerivedData/
