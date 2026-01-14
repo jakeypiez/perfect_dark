@@ -48,57 +48,50 @@ check_requirements() {
     echo ""
 }
 
-# Generate app icon from the logo
+# Generate app icon from the official icon
 generate_icon() {
     echo -e "${YELLOW}Generating app icon...${NC}"
     
-    LOGO_PATH="$SCRIPT_DIR/../perfect_dark_style_n64_icon_by_ro_kurorai_d2568bz-fullview.jpg"
+    # Use the official Perfect Dark icon from the port
+    ICON_SOURCE="$SCRIPT_DIR/../dist/windows/icon.ico"
     ICONSET_DIR="$PROJECT_DIR/$BUNDLE_NAME/Assets.xcassets/AppIcon.appiconset"
     TEMP_ICONSET="$BUILD_DIR/AppIcon.iconset"
     
-    if [ ! -f "$LOGO_PATH" ]; then
-        echo -e "${RED}Error: Logo file not found at $LOGO_PATH${NC}"
-        exit 1
+    # Check if icons already exist in Assets catalog
+    if [ -f "$ICONSET_DIR/AppIcon-1024.png" ]; then
+        echo -e "${GREEN}✓ App icons already exist in Assets catalog${NC}"
+    else
+        echo -e "${YELLOW}Icon PNGs not found, please run icon conversion manually${NC}"
     fi
     
     # Clean and create temp directory for iconset
     rm -rf "$TEMP_ICONSET"
     mkdir -p "$TEMP_ICONSET"
-    mkdir -p "$ICONSET_DIR"
+    mkdir -p "$BUILD_DIR"
     
-    # Convert JPEG to PNG first and create a square version
-    TEMP_PNG="$BUILD_DIR/logo_temp.png"
-    sips -s format png "$LOGO_PATH" --out "$TEMP_PNG" > /dev/null 2>&1
+    # Use existing PNGs from Assets catalog to create iconset for iconutil
+    if [ -f "$ICONSET_DIR/AppIcon-16.png" ]; then
+        cp "$ICONSET_DIR/AppIcon-16.png" "$TEMP_ICONSET/icon_16x16.png"
+        cp "$ICONSET_DIR/AppIcon-32.png" "$TEMP_ICONSET/icon_16x16@2x.png"
+        cp "$ICONSET_DIR/AppIcon-32.png" "$TEMP_ICONSET/icon_32x32.png"
+        cp "$ICONSET_DIR/AppIcon-64.png" "$TEMP_ICONSET/icon_32x32@2x.png"
+        cp "$ICONSET_DIR/AppIcon-128.png" "$TEMP_ICONSET/icon_128x128.png"
+        cp "$ICONSET_DIR/AppIcon-256.png" "$TEMP_ICONSET/icon_128x128@2x.png"
+        cp "$ICONSET_DIR/AppIcon-256.png" "$TEMP_ICONSET/icon_256x256.png"
+        cp "$ICONSET_DIR/AppIcon-512.png" "$TEMP_ICONSET/icon_256x256@2x.png"
+        cp "$ICONSET_DIR/AppIcon-512.png" "$TEMP_ICONSET/icon_512x512.png"
+        cp "$ICONSET_DIR/AppIcon-1024.png" "$TEMP_ICONSET/icon_512x512@2x.png"
+        
+        # Generate .icns file
+        iconutil -c icns "$TEMP_ICONSET" -o "$BUILD_DIR/AppIcon.icns"
+        rm -rf "$TEMP_ICONSET"
+        
+        echo -e "${GREEN}✓ App icon generated${NC}"
+    else
+        echo -e "${RED}Error: Icon PNGs not found in $ICONSET_DIR${NC}"
+        exit 1
+    fi
     
-    # Generate all required icon sizes with proper naming for iconutil
-    sips -z 16 16 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_16x16.png" > /dev/null 2>&1
-    sips -z 32 32 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_16x16@2x.png" > /dev/null 2>&1
-    sips -z 32 32 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_32x32.png" > /dev/null 2>&1
-    sips -z 64 64 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_32x32@2x.png" > /dev/null 2>&1
-    sips -z 128 128 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_128x128.png" > /dev/null 2>&1
-    sips -z 256 256 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_128x128@2x.png" > /dev/null 2>&1
-    sips -z 256 256 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_256x256.png" > /dev/null 2>&1
-    sips -z 512 512 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_256x256@2x.png" > /dev/null 2>&1
-    sips -z 512 512 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_512x512.png" > /dev/null 2>&1
-    sips -z 1024 1024 "$TEMP_PNG" --out "$TEMP_ICONSET/icon_512x512@2x.png" > /dev/null 2>&1
-    
-    # Also copy icons to the Assets catalog for Xcode
-    sips -z 16 16 "$TEMP_PNG" --out "$ICONSET_DIR/AppIcon-16.png" > /dev/null 2>&1
-    sips -z 32 32 "$TEMP_PNG" --out "$ICONSET_DIR/AppIcon-32.png" > /dev/null 2>&1
-    sips -z 64 64 "$TEMP_PNG" --out "$ICONSET_DIR/AppIcon-64.png" > /dev/null 2>&1
-    sips -z 128 128 "$TEMP_PNG" --out "$ICONSET_DIR/AppIcon-128.png" > /dev/null 2>&1
-    sips -z 256 256 "$TEMP_PNG" --out "$ICONSET_DIR/AppIcon-256.png" > /dev/null 2>&1
-    sips -z 512 512 "$TEMP_PNG" --out "$ICONSET_DIR/AppIcon-512.png" > /dev/null 2>&1
-    sips -z 1024 1024 "$TEMP_PNG" --out "$ICONSET_DIR/AppIcon-1024.png" > /dev/null 2>&1
-    
-    # Generate .icns file
-    iconutil -c icns "$TEMP_ICONSET" -o "$BUILD_DIR/AppIcon.icns"
-    
-    # Clean up temp files
-    rm -f "$TEMP_PNG"
-    rm -rf "$TEMP_ICONSET"
-    
-    echo -e "${GREEN}✓ App icon generated${NC}"
     echo ""
 }
 
