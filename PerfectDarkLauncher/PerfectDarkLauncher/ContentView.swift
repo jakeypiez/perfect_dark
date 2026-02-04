@@ -38,6 +38,10 @@ struct ContentView: View {
                         case 4:
                             PlayerSettingsView()
                         case 5:
+                            InputSettingsView()
+                        case 6:
+                            DebugSettingsView()
+                        case 7:
                             AdvancedSettingsView()
                         default:
                             RomSelectionView()
@@ -101,6 +105,8 @@ struct SidebarView: View {
         ("gearshape", "Game"),
         ("speaker.wave.2", "Audio"),
         ("person", "Player"),
+        ("keyboard", "Input"),
+        ("ladybug", "Debug"),
         ("wrench.and.screwdriver", "Advanced")
     ]
     
@@ -758,12 +764,267 @@ struct PlayerSettingsView: View {
                 .padding(8)
             }
             
+            // Crosshair Settings
+            GroupBox {
+                VStack(alignment: .leading, spacing: 16) {
+                    Label("Crosshair", systemImage: "scope")
+                        .font(.headline)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text("Crosshair Sway")
+                            Spacer()
+                            Text(String(format: "%.1f×", settings.crosshairSway))
+                                .foregroundColor(.secondary)
+                                .frame(width: 50)
+                        }
+                        Slider(value: $settings.crosshairSway, in: 0...3, step: 0.1)
+                    }
+                    
+                    HStack {
+                        Text("Crosshair Size")
+                        Spacer()
+                        Picker("", selection: $settings.crosshairSize) {
+                            Text("Tiny").tag(0)
+                            Text("Small").tag(1)
+                            Text("Medium").tag(2)
+                            Text("Large").tag(3)
+                            Text("Extra Large").tag(4)
+                        }
+                        .pickerStyle(.menu)
+                        .frame(width: 150)
+                    }
+                    
+                    HStack {
+                        Text("Health Indicator")
+                        Spacer()
+                        Picker("", selection: $settings.crosshairHealth) {
+                            Text("Off").tag(0)
+                            Text("Color").tag(1)
+                            Text("White").tag(2)
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 180)
+                    }
+                }
+                .padding(8)
+            }
+            
+            // Controls
+            GroupBox {
+                VStack(alignment: .leading, spacing: 16) {
+                    Label("Controls", systemImage: "keyboard")
+                        .font(.headline)
+                    
+                    HStack {
+                        Text("Crouch Mode")
+                        Spacer()
+                        Picker("", selection: $settings.crouchMode) {
+                            ForEach(GameSettings.CrouchMode.allCases) { mode in
+                                Text(mode.displayName).tag(mode)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .frame(width: 220)
+                    }
+                    
+                    Toggle("Extended Controls", isOn: $settings.extendedControls)
+                    Text("Enables additional control options like lean, quick turn, etc.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                    
+                    Toggle("Use Key Reloads", isOn: $settings.useKeyReloads)
+                    Text("Press use key to reload weapon instead of automatic reload")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text("Radial Menu Speed")
+                            Spacer()
+                            Text(String(format: "%.1f×", settings.radialMenuSpeed))
+                                .foregroundColor(.secondary)
+                                .frame(width: 50)
+                        }
+                        Slider(value: $settings.radialMenuSpeed, in: 0.1...3, step: 0.1)
+                    }
+                }
+                .padding(8)
+            }
+        }
+    }
+}
+
+struct InputSettingsView: View {
+    @EnvironmentObject var settings: GameSettings
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            SectionHeader(title: "Input Settings", subtitle: "Configure mouse and controller options")
+            
+            // Mouse Settings
+            GroupBox {
+                VStack(alignment: .leading, spacing: 16) {
+                    Label("Mouse", systemImage: "computermouse")
+                        .font(.headline)
+                    
+                    Toggle("Enable Mouse", isOn: $settings.mouseEnabled)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text("Mouse Speed X")
+                            Spacer()
+                            Text(String(format: "%.1f", settings.mouseSpeedX))
+                                .foregroundColor(.secondary)
+                                .frame(width: 50)
+                        }
+                        Slider(value: $settings.mouseSpeedX, in: -10...10, step: 0.1)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text("Mouse Speed Y")
+                            Spacer()
+                            Text(String(format: "%.1f", settings.mouseSpeedY))
+                                .foregroundColor(.secondary)
+                                .frame(width: 50)
+                        }
+                        Slider(value: $settings.mouseSpeedY, in: -10...10, step: 0.1)
+                    }
+                    
+                    Text("Negative values invert the axis. Speed affects in-game mouse movement.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(8)
+            }
+            
+            // Controller Settings
+            GroupBox {
+                VStack(alignment: .leading, spacing: 12) {
+                    Label("Controllers", systemImage: "gamecontroller")
+                        .font(.headline)
+                    
+                    HStack {
+                        Text("Fake Gamepads")
+                        Spacer()
+                        Stepper(value: $settings.fakeGamepads, in: 0...4) {
+                            Text("\(settings.fakeGamepads)")
+                                .frame(width: 30, alignment: .trailing)
+                        }
+                    }
+                    
+                    Text("Simulates additional gamepads for testing multiplayer without physical controllers")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(8)
+            }
+            
             GroupBox {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Note", systemImage: "info.circle")
                         .font(.headline)
                     
-                    Text("Additional player settings and key bindings can be configured in-game or by editing the pd.ini configuration file.")
+                    Text("Controller bindings and deadzone settings can be configured in the pd.ini file or in-game.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(8)
+            }
+        }
+    }
+}
+
+struct DebugSettingsView: View {
+    @EnvironmentObject var settings: GameSettings
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            SectionHeader(title: "Debug Settings", subtitle: "Developer and debugging options")
+            
+            // FPS Display
+            GroupBox {
+                VStack(alignment: .leading, spacing: 16) {
+                    Label("Performance", systemImage: "gauge.high")
+                        .font(.headline)
+                    
+                    Toggle("Show FPS Counter", isOn: $settings.displayFPS)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack {
+                            Text("FPS Update Interval")
+                            Spacer()
+                            Text(String(format: "%.1fs", settings.displayFPSInterval))
+                                .foregroundColor(.secondary)
+                                .frame(width: 50)
+                        }
+                        Slider(value: $settings.displayFPSInterval, in: 0.1...5, step: 0.1)
+                    }
+                    .disabled(!settings.displayFPS)
+                    .opacity(settings.displayFPS ? 1.0 : 0.5)
+                    
+                    Text("How often the FPS counter updates. Lower values update more frequently.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(8)
+            }
+            
+            // Timing Settings
+            GroupBox {
+                VStack(alignment: .leading, spacing: 16) {
+                    Label("Timing", systemImage: "clock")
+                        .font(.headline)
+                    
+                    HStack {
+                        Text("Tick Rate Divisor")
+                        Spacer()
+                        Stepper(value: $settings.tickRateDivisor, in: 0...10) {
+                            Text(settings.tickRateDivisor == 0 ? "Auto" : "\(settings.tickRateDivisor)")
+                                .frame(width: 50, alignment: .trailing)
+                        }
+                    }
+                    
+                    Text("Controls game tick rate. 0 = automatic. Higher values slow the game for debugging.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Toggle("Extra Sleep", isOn: $settings.extraSleep)
+                    Text("Adds extra sleep between frames. May reduce CPU usage but can cause stuttering.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                }
+                .padding(8)
+            }
+            
+            // Window Settings
+            GroupBox {
+                VStack(alignment: .leading, spacing: 12) {
+                    Label("Window", systemImage: "macwindow")
+                        .font(.headline)
+                    
+                    Toggle("Center Window on Launch", isOn: $settings.centerWindow)
+                    
+                    Text("Centers the game window on screen when launching")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 20)
+                }
+                .padding(8)
+            }
+            
+            // Warning
+            GroupBox {
+                VStack(alignment: .leading, spacing: 8) {
+                    Label("Warning", systemImage: "exclamationmark.triangle")
+                        .font(.headline)
+                        .foregroundColor(.orange)
+                    
+                    Text("Debug settings are intended for developers and advanced users. Incorrect values may cause performance issues or crashes.")
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

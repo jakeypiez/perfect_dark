@@ -12,7 +12,7 @@ APP_NAME="Carrington"
 BUNDLE_NAME="Carrington"
 XCODE_PROJECT="PerfectDarkLauncher"  # Xcode project/scheme name (unchanged)
 DMG_NAME="Carrington"
-VERSION="1.0.0"
+VERSION="1.1.0"
 
 # Colors for output
 RED='\033[0;31m'

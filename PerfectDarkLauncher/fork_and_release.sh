@@ -8,10 +8,10 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="$SCRIPT_DIR/build"
-DMG_PATH="$BUILD_DIR/PerfectDarkLauncher-1.0.0.dmg"
+DMG_PATH="$BUILD_DIR/Carrington-1.1.0.dmg"
 ORIGINAL_REPO="fgsfdsfgs/perfect_dark"
-RELEASE_TAG="launcher-v1.0.0"
-RELEASE_TITLE="Perfect Dark Launcher v1.0.0"
+RELEASE_TAG="v1.1.0"
+RELEASE_TITLE="Carrington v1.1.0"
 
 # Colors for output
 RED='\033[0;31m'
@@ -114,31 +114,50 @@ push_changes() {
 create_release() {
     echo -e "${YELLOW}Creating GitHub release...${NC}"
     
-    RELEASE_NOTES="## Perfect Dark Launcher for macOS
+    RELEASE_NOTES="## Carrington - Perfect Dark Launcher for macOS
 
 A native macOS launcher application for the Perfect Dark PC Port.
+
+### What's New in v1.1.0
+
+#### New Debug Tab
+- **Show FPS Counter** - Toggle to display FPS on screen
+- **FPS Update Interval** - Control how often the FPS counter updates
+- **Tick Rate Divisor** - Control game tick rate for debugging
+- **Extra Sleep** - Reduce CPU usage between frames
+- **Center Window on Launch** - Auto-center the game window
+
+#### New Input Tab
+- **Enable Mouse** - Toggle mouse input on/off
+- **Mouse Speed X/Y** - Global mouse speed controls with axis inversion
+- **Fake Gamepads** - Simulate up to 4 controllers for multiplayer testing
+
+#### Enhanced Player Settings
+- **Crosshair Customization** - Size, sway, and health indicator options
+- **Crouch Mode** - Hold, Toggle, or Toggle (Analog)
+- **Extended Controls** - Enable lean, quick turn, and more
+- **Use Key Reloads** - Manual reload option
+- **Radial Menu Speed** - Adjust weapon wheel speed
 
 ### Features
 - 🎮 ROM Selection: Drag & drop or browse for .z64 ROM files
 - 🌍 Auto-detection of ROM region (NTSC, PAL, JPN)
 - 🖥️ Video settings: Resolution, fullscreen, VSync, MSAA, texture filtering
 - ⚙️ Game settings: Skip intro, HUD positioning, memory size, screen shake
-- 🎯 Player settings: Custom FOV, mouse aim mode, sensitivity
+- 🎯 Player settings: Custom FOV, mouse aim mode, sensitivity, crosshair
+- 🐛 Debug settings: FPS counter, tick rate, window centering
+- ⌨️ Input settings: Mouse speed, fake gamepads
 - 🔧 Advanced settings: Custom paths, direct config file editing
 
 ### Requirements
 - macOS 12.0 (Monterey) or later
 - Perfect Dark ROM file in .z64 format
-- Built Perfect Dark PC Port executable
 
 ### Installation
 1. Download the DMG file below
-2. Open the DMG and drag the app to Applications
+2. Open the DMG and drag Carrington to Applications
 3. Launch the app and select your ROM file
-4. Configure settings as desired and click Launch Game
-
-### Note
-You must build the Perfect Dark port executable separately. See the main README for build instructions."
+4. Configure settings as desired and click Launch Game"
 
     # Delete existing release if it exists
     gh release delete "$RELEASE_TAG" --repo "$FORK_REPO" --yes 2>/dev/null || true

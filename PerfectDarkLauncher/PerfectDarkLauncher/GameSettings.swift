@@ -56,6 +56,20 @@ class GameSettings: ObservableObject {
     @Published var displayFPS: Bool {
         didSet { saveSettings() }
     }
+    @Published var displayFPSInterval: Double {
+        didSet { saveSettings() }
+    }
+    @Published var centerWindow: Bool {
+        didSet { saveSettings() }
+    }
+    
+    // Debug/Developer Settings
+    @Published var tickRateDivisor: Int {
+        didSet { saveSettings() }
+    }
+    @Published var extraSleep: Bool {
+        didSet { saveSettings() }
+    }
     
     // Game Settings
     @Published var memorySize: Int {
@@ -105,6 +119,38 @@ class GameSettings: ObservableObject {
         didSet { saveSettings() }
     }
     @Published var crosshairSway: Double {
+        didSet { saveSettings() }
+    }
+    @Published var crosshairSize: Int {
+        didSet { saveSettings() }
+    }
+    @Published var crosshairHealth: Int {
+        didSet { saveSettings() }
+    }
+    @Published var extendedControls: Bool {
+        didSet { saveSettings() }
+    }
+    @Published var radialMenuSpeed: Double {
+        didSet { saveSettings() }
+    }
+    @Published var crouchMode: CrouchMode {
+        didSet { saveSettings() }
+    }
+    @Published var useKeyReloads: Bool {
+        didSet { saveSettings() }
+    }
+    
+    // Input Settings
+    @Published var mouseEnabled: Bool {
+        didSet { saveSettings() }
+    }
+    @Published var mouseSpeedX: Double {
+        didSet { saveSettings() }
+    }
+    @Published var mouseSpeedY: Double {
+        didSet { saveSettings() }
+    }
+    @Published var fakeGamepads: Int {
         didSet { saveSettings() }
     }
     
@@ -171,6 +217,38 @@ class GameSettings: ObservableObject {
         }
     }
     
+    enum CrouchMode: Int, CaseIterable, Identifiable {
+        case hold = 0
+        case toggle = 1
+        case toggleAnalog = 2
+        
+        var id: Int { rawValue }
+        
+        var displayName: String {
+            switch self {
+            case .hold: return "Hold"
+            case .toggle: return "Toggle"
+            case .toggleAnalog: return "Toggle (Analog)"
+            }
+        }
+    }
+    
+    enum CrosshairHealth: Int, CaseIterable, Identifiable {
+        case off = 0
+        case onColor = 1
+        case onWhite = 2
+        
+        var id: Int { rawValue }
+        
+        var displayName: String {
+            switch self {
+            case .off: return "Off"
+            case .onColor: return "On (Color)"
+            case .onWhite: return "On (White)"
+            }
+        }
+    }
+    
     init() {
         isLoading = true
         
@@ -194,6 +272,12 @@ class GameSettings: ObservableObject {
         maximize = defaults.object(forKey: "maximize") as? Bool ?? false
         textureFilter2D = defaults.object(forKey: "textureFilter2D") as? Bool ?? false
         displayFPS = defaults.object(forKey: "displayFPS") as? Bool ?? false
+        displayFPSInterval = defaults.object(forKey: "displayFPSInterval") as? Double ?? 1.0
+        centerWindow = defaults.object(forKey: "centerWindow") as? Bool ?? true
+        
+        // Debug/Developer defaults
+        tickRateDivisor = defaults.object(forKey: "tickRateDivisor") as? Int ?? 0
+        extraSleep = defaults.object(forKey: "extraSleep") as? Bool ?? false
         
         // Game defaults
         memorySize = defaults.object(forKey: "memorySize") as? Int ?? 16
@@ -215,6 +299,18 @@ class GameSettings: ObservableObject {
         player1MouseAimSpeedX = defaults.object(forKey: "player1MouseAimSpeedX") as? Double ?? 1.0
         player1MouseAimSpeedY = defaults.object(forKey: "player1MouseAimSpeedY") as? Double ?? 1.0
         crosshairSway = defaults.object(forKey: "crosshairSway") as? Double ?? 1.0
+        crosshairSize = defaults.object(forKey: "crosshairSize") as? Int ?? 0
+        crosshairHealth = defaults.object(forKey: "crosshairHealth") as? Int ?? 0
+        extendedControls = defaults.object(forKey: "extendedControls") as? Bool ?? false
+        radialMenuSpeed = defaults.object(forKey: "radialMenuSpeed") as? Double ?? 1.0
+        crouchMode = CrouchMode(rawValue: defaults.object(forKey: "crouchMode") as? Int ?? 0) ?? .hold
+        useKeyReloads = defaults.object(forKey: "useKeyReloads") as? Bool ?? false
+        
+        // Input defaults
+        mouseEnabled = defaults.object(forKey: "mouseEnabled") as? Bool ?? true
+        mouseSpeedX = defaults.object(forKey: "mouseSpeedX") as? Double ?? 1.0
+        mouseSpeedY = defaults.object(forKey: "mouseSpeedY") as? Double ?? 1.0
+        fakeGamepads = defaults.object(forKey: "fakeGamepads") as? Int ?? 0
         
         // Paths
         gameExecutablePath = defaults.string(forKey: "gameExecutablePath") ?? ""
@@ -244,6 +340,12 @@ class GameSettings: ObservableObject {
         defaults.set(maximize, forKey: "maximize")
         defaults.set(textureFilter2D, forKey: "textureFilter2D")
         defaults.set(displayFPS, forKey: "displayFPS")
+        defaults.set(displayFPSInterval, forKey: "displayFPSInterval")
+        defaults.set(centerWindow, forKey: "centerWindow")
+        
+        // Debug/Developer settings
+        defaults.set(tickRateDivisor, forKey: "tickRateDivisor")
+        defaults.set(extraSleep, forKey: "extraSleep")
         
         defaults.set(memorySize, forKey: "memorySize")
         defaults.set(skipIntro, forKey: "skipIntro")
@@ -262,6 +364,18 @@ class GameSettings: ObservableObject {
         defaults.set(player1MouseAimSpeedX, forKey: "player1MouseAimSpeedX")
         defaults.set(player1MouseAimSpeedY, forKey: "player1MouseAimSpeedY")
         defaults.set(crosshairSway, forKey: "crosshairSway")
+        defaults.set(crosshairSize, forKey: "crosshairSize")
+        defaults.set(crosshairHealth, forKey: "crosshairHealth")
+        defaults.set(extendedControls, forKey: "extendedControls")
+        defaults.set(radialMenuSpeed, forKey: "radialMenuSpeed")
+        defaults.set(crouchMode.rawValue, forKey: "crouchMode")
+        defaults.set(useKeyReloads, forKey: "useKeyReloads")
+        
+        // Input settings
+        defaults.set(mouseEnabled, forKey: "mouseEnabled")
+        defaults.set(mouseSpeedX, forKey: "mouseSpeedX")
+        defaults.set(mouseSpeedY, forKey: "mouseSpeedY")
+        defaults.set(fakeGamepads, forKey: "fakeGamepads")
         
         defaults.set(gameExecutablePath, forKey: "gameExecutablePath")
         defaults.set(gameDataPath, forKey: "gameDataPath")
@@ -285,6 +399,12 @@ class GameSettings: ObservableObject {
         maximize = false
         textureFilter2D = false
         displayFPS = false
+        displayFPSInterval = 1.0
+        centerWindow = true
+        
+        // Debug/Developer defaults
+        tickRateDivisor = 0
+        extraSleep = false
         
         memorySize = 16
         skipIntro = false
@@ -303,6 +423,18 @@ class GameSettings: ObservableObject {
         player1MouseAimSpeedX = 1.0
         player1MouseAimSpeedY = 1.0
         crosshairSway = 1.0
+        crosshairSize = 0
+        crosshairHealth = 0
+        extendedControls = false
+        radialMenuSpeed = 1.0
+        crouchMode = .hold
+        useKeyReloads = false
+        
+        // Input defaults
+        mouseEnabled = true
+        mouseSpeedX = 1.0
+        mouseSpeedY = 1.0
+        fakeGamepads = 0
         
         isLoading = false
         saveSettings()
